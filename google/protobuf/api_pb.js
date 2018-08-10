@@ -9,7 +9,7 @@
 
 var jspb = require('google-protobuf');
 var goog = jspb;
-var global = Function('return this')();
+
 
 var google_protobuf_source_context_pb = require('google-protobuf/google/protobuf/source_context_pb.js');
 var google_protobuf_type_pb = require('google-protobuf/google/protobuf/type_pb.js');

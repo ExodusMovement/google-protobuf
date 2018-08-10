@@ -9,7 +9,7 @@
 
 var jspb = require('google-protobuf');
 var goog = jspb;
-var global = Function('return this')();
+
 
 goog.exportSymbol('proto.google.protobuf.DescriptorProto', null, global);
 goog.exportSymbol('proto.google.protobuf.DescriptorProto.ExtensionRange', null, global);
