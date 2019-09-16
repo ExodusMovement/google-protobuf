@@ -682,7 +682,6 @@ goog.isDef = function(a) {
 goog.exportPath_ = function(a, b, c) {
   a = a.split(".");
   c = c || goog.global;
-  a[0] in c || !c.execScript || c.execScript("var " + a[0]);
   for (var d; a.length && (d = a.shift()); )
     !a.length && goog.isDef(b) ? (c[d] = b) : (c = c[d] ? c[d] : (c[d] = {}));
 };
