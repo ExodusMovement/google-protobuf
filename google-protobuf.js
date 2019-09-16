@@ -916,32 +916,6 @@ goog.now =
   function() {
     return +new Date();
   };
-goog.globalEval = function(a) {
-  if (goog.global.execScript) goog.global.execScript(a, "JavaScript");
-  else if (goog.global.eval) {
-    if (null == goog.evalWorksForGlobals_)
-      if (
-        (goog.global.eval("var _evalTest_ = 1;"),
-        "undefined" != typeof goog.global._evalTest_)
-      ) {
-        try {
-          delete goog.global._evalTest_;
-        } catch (d) {}
-        goog.evalWorksForGlobals_ = !0;
-      } else goog.evalWorksForGlobals_ = !1;
-    if (goog.evalWorksForGlobals_) goog.global.eval(a);
-    else {
-      var b = goog.global.document,
-        c = b.createElement("SCRIPT");
-      c.type = "text/javascript";
-      c.defer = !1;
-      c.appendChild(b.createTextNode(a));
-      b.body.appendChild(c);
-      b.body.removeChild(c);
-    }
-  } else throw Error("goog.globalEval not available");
-};
-goog.evalWorksForGlobals_ = null;
 goog.getCssName = function(a, b) {
   var c = function(a) {
       return goog.cssNameMapping_[a] || a;
