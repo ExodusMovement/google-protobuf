@@ -7,12 +7,12 @@
  */
 // GENERATED CODE -- DO NOT EDIT!
 
-var jspb = require('google-protobuf');
+var jspb = require('@exodus/google-protobuf');
 var goog = jspb;
 
 
-var google_protobuf_any_pb = require('google-protobuf/google/protobuf/any_pb.js');
-var google_protobuf_source_context_pb = require('google-protobuf/google/protobuf/source_context_pb.js');
+var google_protobuf_any_pb = require('@exodus/google-protobuf/google/protobuf/any_pb.js');
+var google_protobuf_source_context_pb = require('@exodus/google-protobuf/google/protobuf/source_context_pb.js');
 goog.exportSymbol('proto.google.protobuf.Enum', null, global);
 goog.exportSymbol('proto.google.protobuf.EnumValue', null, global);
 goog.exportSymbol('proto.google.protobuf.Field', null, global);
