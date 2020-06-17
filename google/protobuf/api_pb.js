@@ -7,12 +7,12 @@
  */
 // GENERATED CODE -- DO NOT EDIT!
 
-var jspb = require('google-protobuf');
+var jspb = require('@exodus/google-protobuf');
 var goog = jspb;
 
 
-var google_protobuf_source_context_pb = require('google-protobuf/google/protobuf/source_context_pb.js');
-var google_protobuf_type_pb = require('google-protobuf/google/protobuf/type_pb.js');
+var google_protobuf_source_context_pb = require('@exodus/google-protobuf/google/protobuf/source_context_pb.js');
+var google_protobuf_type_pb = require('@exodus/google-protobuf/google/protobuf/type_pb.js');
 goog.exportSymbol('proto.google.protobuf.Api', null, global);
 goog.exportSymbol('proto.google.protobuf.Method', null, global);
 goog.exportSymbol('proto.google.protobuf.Mixin', null, global);
