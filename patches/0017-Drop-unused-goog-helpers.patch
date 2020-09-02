@@ -1,0 +1,56 @@
+From da417fea717fae6f5750f7d1eae4d23902d1f3e0 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=D0=A1=D0=BA=D0=BE=D0=B2=D0=BE=D1=80=D0=BE=D0=B4=D0=B0=20?=
+ =?UTF-8?q?=D0=9D=D0=B8=D0=BA=D0=B8=D1=82=D0=B0=20=D0=90=D0=BD=D0=B4=D1=80?=
+ =?UTF-8?q?=D0=B5=D0=B5=D0=B2=D0=B8=D1=87?= <chalkerx@gmail.com>
+Date: Wed, 2 Sep 2020 08:22:29 +0300
+Subject: [PATCH 17/27] Drop unused goog helpers
+
+---
+ google-protobuf.js | 22 ----------------------
+ 1 file changed, 22 deletions(-)
+
+diff --git a/google-protobuf.js b/google-protobuf.js
+index 353a1ae..777deae 100644
+--- a/google-protobuf.js
++++ b/google-protobuf.js
+@@ -48,11 +48,6 @@ goog.LOCALE = 'en';
+ goog.TRUSTED_SITE = !0;
+ goog.STRICT_MODE_COMPATIBLE = !1;
+ goog.DISALLOW_TEST_ONLY_CODE = COMPILED && !goog.DEBUG;
+-goog.ENABLE_CHROME_APP_SAFE_SCRIPT_LOADING = !1;
+-goog.setTestOnly = function (a) {
+-  if (goog.DISALLOW_TEST_ONLY_CODE)
+-    throw ((a = a || ''), Error('Importing test-only code into non-debug environment' + (a ? ': ' + a : '.')));
+-};
+ goog.forwardDeclare = function (a) {};
+ goog.getObjectByName = function (a, b) {
+   a = a.split('.');
+@@ -70,25 +65,8 @@ goog.ENABLE_DEBUG_LOADER = !0;
+ goog.logToConsole_ = function (a) {
+   goog.global.console && goog.global.console.error(a);
+ };
+-goog.require = function (a) {
+-};
+-goog.requireType = function (a) {
+-  return {};
+-};
+ goog.basePath = '';
+ goog.nullFunction = function () {};
+-goog.abstractMethod = function () {
+-  throw Error('unimplemented abstract method');
+-};
+-goog.addSingletonGetter = function (a) {
+-  a.instance_ = void 0;
+-  a.getInstance = function () {
+-    if (a.instance_) return a.instance_;
+-    goog.DEBUG && (goog.instantiatedSingletons_[goog.instantiatedSingletons_.length] = a);
+-    return (a.instance_ = new a());
+-  };
+-};
+-goog.instantiatedSingletons_ = [];
+ goog.LOAD_MODULE_USING_EVAL = !0;
+ goog.SEAL_MODULE_EXPORTS = goog.DEBUG;
+ goog.loadedModules_ = {};
+-- 
+2.28.0
+

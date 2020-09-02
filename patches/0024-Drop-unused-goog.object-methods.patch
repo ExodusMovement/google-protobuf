@@ -1,0 +1,199 @@
+From 7f5b70c37e616172f287154fddbf2549fbd4e6f5 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=D0=A1=D0=BA=D0=BE=D0=B2=D0=BE=D1=80=D0=BE=D0=B4=D0=B0=20?=
+ =?UTF-8?q?=D0=9D=D0=B8=D0=BA=D0=B8=D1=82=D0=B0=20=D0=90=D0=BD=D0=B4=D1=80?=
+ =?UTF-8?q?=D0=B5=D0=B5=D0=B2=D0=B8=D1=87?= <chalkerx@gmail.com>
+Date: Wed, 2 Sep 2020 08:55:47 +0300
+Subject: [PATCH 24/27] Drop unused goog.object methods
+
+---
+ google-protobuf.js | 167 ---------------------------------------------
+ 1 file changed, 167 deletions(-)
+
+diff --git a/google-protobuf.js b/google-protobuf.js
+index 205577c..1dbfb41 100644
+--- a/google-protobuf.js
++++ b/google-protobuf.js
+@@ -318,140 +318,6 @@ goog.string.internal.contains = function (a, b) {
+   return -1 != a.indexOf(b);
+ };
+ goog.object = {};
+-goog.object.is = function (a, b) {
+-  return a === b ? 0 !== a || 1 / a === 1 / b : a !== a && b !== b;
+-};
+-goog.object.forEach = function (a, b, c) {
+-  for (var d in a) b.call(c, a[d], d, a);
+-};
+-goog.object.filter = function (a, b, c) {
+-  var d = {},
+-    e;
+-  for (e in a) b.call(c, a[e], e, a) && (d[e] = a[e]);
+-  return d;
+-};
+-goog.object.map = function (a, b, c) {
+-  var d = {},
+-    e;
+-  for (e in a) d[e] = b.call(c, a[e], e, a);
+-  return d;
+-};
+-goog.object.some = function (a, b, c) {
+-  for (var d in a) if (b.call(c, a[d], d, a)) return !0;
+-  return !1;
+-};
+-goog.object.every = function (a, b, c) {
+-  for (var d in a) if (!b.call(c, a[d], d, a)) return !1;
+-  return !0;
+-};
+-goog.object.getCount = function (a) {
+-  var b = 0,
+-    c;
+-  for (c in a) b++;
+-  return b;
+-};
+-goog.object.getAnyKey = function (a) {
+-  for (var b in a) return b;
+-};
+-goog.object.getAnyValue = function (a) {
+-  for (var b in a) return a[b];
+-};
+-goog.object.contains = function (a, b) {
+-  return goog.object.containsValue(a, b);
+-};
+-goog.object.getValues = function (a) {
+-  var b = [],
+-    c = 0,
+-    d;
+-  for (d in a) b[c++] = a[d];
+-  return b;
+-};
+-goog.object.getKeys = function (a) {
+-  var b = [],
+-    c = 0,
+-    d;
+-  for (d in a) b[c++] = d;
+-  return b;
+-};
+-goog.object.getValueByKeys = function (a, b) {
+-  var c = goog.isArrayLike(b),
+-    d = c ? b : arguments;
+-  for (c = c ? 0 : 1; c < d.length; c++) {
+-    if (null == a) return;
+-    a = a[d[c]];
+-  }
+-  return a;
+-};
+-goog.object.containsKey = function (a, b) {
+-  return null !== a && b in a;
+-};
+-goog.object.containsValue = function (a, b) {
+-  for (var c in a) if (a[c] == b) return !0;
+-  return !1;
+-};
+-goog.object.findKey = function (a, b, c) {
+-  for (var d in a) if (b.call(c, a[d], d, a)) return d;
+-};
+-goog.object.findValue = function (a, b, c) {
+-  return (b = goog.object.findKey(a, b, c)) && a[b];
+-};
+-goog.object.isEmpty = function (a) {
+-  for (var b in a) return !1;
+-  return !0;
+-};
+-goog.object.clear = function (a) {
+-  for (var b in a) delete a[b];
+-};
+-goog.object.remove = function (a, b) {
+-  var c;
+-  (c = b in a) && delete a[b];
+-  return c;
+-};
+-goog.object.add = function (a, b, c) {
+-  if (null !== a && b in a) throw Error('The object already contains the key "' + b + '"');
+-  goog.object.set(a, b, c);
+-};
+-goog.object.get = function (a, b, c) {
+-  return null !== a && b in a ? a[b] : c;
+-};
+-goog.object.set = function (a, b, c) {
+-  a[b] = c;
+-};
+-goog.object.setIfUndefined = function (a, b, c) {
+-  return b in a ? a[b] : (a[b] = c);
+-};
+-goog.object.setWithReturnValueIfNotSet = function (a, b, c) {
+-  if (b in a) return a[b];
+-  c = c();
+-  return (a[b] = c);
+-};
+-goog.object.equals = function (a, b) {
+-  for (var c in a) if (!(c in b) || a[c] !== b[c]) return !1;
+-  for (var d in b) if (!(d in a)) return !1;
+-  return !0;
+-};
+-goog.object.clone = function (a) {
+-  var b = {},
+-    c;
+-  for (c in a) b[c] = a[c];
+-  return b;
+-};
+-goog.object.unsafeClone = function (a) {
+-  var b = goog.typeOf(a);
+-  if ('object' == b || 'array' == b) {
+-    if (goog.isFunction(a.clone)) return a.clone();
+-    b = 'array' == b ? [] : {};
+-    for (var c in a) b[c] = goog.object.unsafeClone(a[c]);
+-    return b;
+-  }
+-  return a;
+-};
+-goog.object.transpose = function (a) {
+-  var b = {},
+-    c;
+-  for (c in a) b[a[c]] = c;
+-  return b;
+-};
+ goog.object.PROTOTYPE_FIELDS_ = 'constructor hasOwnProperty isPrototypeOf propertyIsEnumerable toLocaleString toString valueOf'.split(
+   ' '
+ );
+@@ -463,39 +329,6 @@ goog.object.extend = function (a, b) {
+       (c = goog.object.PROTOTYPE_FIELDS_[f]), Object.prototype.hasOwnProperty.call(d, c) && (a[c] = d[c]);
+   }
+ };
+-goog.object.create = function (a) {
+-  var b = arguments.length;
+-  if (1 == b && goog.isArray(arguments[0])) return goog.object.create.apply(null, arguments[0]);
+-  if (b % 2) throw Error('Uneven number of arguments');
+-  for (var c = {}, d = 0; d < b; d += 2) c[arguments[d]] = arguments[d + 1];
+-  return c;
+-};
+-goog.object.createSet = function (a) {
+-  var b = arguments.length;
+-  if (1 == b && goog.isArray(arguments[0])) return goog.object.createSet.apply(null, arguments[0]);
+-  for (var c = {}, d = 0; d < b; d++) c[arguments[d]] = !0;
+-  return c;
+-};
+-goog.object.createImmutableView = function (a) {
+-  var b = a;
+-  Object.isFrozen && !Object.isFrozen(a) && ((b = Object.create(a)), Object.freeze(b));
+-  return b;
+-};
+-goog.object.isImmutableView = function (a) {
+-  return !!Object.isFrozen && Object.isFrozen(a);
+-};
+-goog.object.getAllPropertyNames = function (a, b, c) {
+-  if (!a) return [];
+-  if (!Object.getOwnPropertyNames || !Object.getPrototypeOf) return goog.object.getKeys(a);
+-  for (var d = {}; a && (a !== Object.prototype || b) && (a !== Function.prototype || c); ) {
+-    for (var e = Object.getOwnPropertyNames(a), f = 0; f < e.length; f++) d[e[f]] = !0;
+-    a = Object.getPrototypeOf(a);
+-  }
+-  return goog.object.getKeys(d);
+-};
+-goog.object.getSuperClass = function (a) {
+-  return (a = Object.getPrototypeOf(a.prototype)) && a.constructor;
+-};
+ goog.functions = {};
+ goog.functions.constant = function (a) {
+   return function () {
+-- 
+2.28.0
+

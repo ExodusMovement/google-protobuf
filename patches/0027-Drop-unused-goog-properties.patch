@@ -1,0 +1,43 @@
+From 15b001751ba5c6ff4d0ebeb06ce50a14db133aa4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=D0=A1=D0=BA=D0=BE=D0=B2=D0=BE=D1=80=D0=BE=D0=B4=D0=B0=20?=
+ =?UTF-8?q?=D0=9D=D0=B8=D0=BA=D0=B8=D1=82=D0=B0=20=D0=90=D0=BD=D0=B4=D1=80?=
+ =?UTF-8?q?=D0=B5=D0=B5=D0=B2=D0=B8=D1=87?= <chalkerx@gmail.com>
+Date: Wed, 2 Sep 2020 09:01:58 +0300
+Subject: [PATCH 27/27] Drop unused goog properties
+
+---
+ google-protobuf.js | 15 ---------------
+ 1 file changed, 15 deletions(-)
+
+diff --git a/google-protobuf.js b/google-protobuf.js
+index 2a32a92..d8144f5 100644
+--- a/google-protobuf.js
++++ b/google-protobuf.js
+@@ -1,24 +1,9 @@
+ var COMPILED = !0,
+   goog = goog || {};
+ goog.global = this || self;
+-goog.FEATURESET_YEAR = 2012;
+ goog.DEBUG = !0;
+-goog.LOCALE = 'en';
+ goog.TRUSTED_SITE = !0;
+-goog.STRICT_MODE_COMPATIBLE = !1;
+ goog.DISALLOW_TEST_ONLY_CODE = COMPILED && !goog.DEBUG;
+-goog.ENABLE_DEBUG_LOADER = !0;
+-goog.basePath = '';
+-goog.nullFunction = function () {};
+-goog.LOAD_MODULE_USING_EVAL = !0;
+-goog.SEAL_MODULE_EXPORTS = goog.DEBUG;
+-goog.loadedModules_ = {};
+-goog.DEPENDENCIES_ENABLED = !COMPILED && goog.ENABLE_DEBUG_LOADER;
+-goog.TRANSPILE = 'detect';
+-goog.ASSUME_ES_MODULES_TRANSPILED = !1;
+-goog.TRANSPILE_TO_LANGUAGE = '';
+-goog.TRANSPILER = 'transpile.js';
+-goog.hasBadLetScoping = null;
+ goog.typeOf = function (a) {
+   var b = typeof a;
+   if ('object' == b)
+-- 
+2.28.0
+

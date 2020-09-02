@@ -1,0 +1,90 @@
+From 31c3dddfcc3920268d29f832ee7ab93360278d6f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=D0=A1=D0=BA=D0=BE=D0=B2=D0=BE=D1=80=D0=BE=D0=B4=D0=B0=20?=
+ =?UTF-8?q?=D0=9D=D0=B8=D0=BA=D0=B8=D1=82=D0=B0=20=D0=90=D0=BD=D0=B4=D1=80?=
+ =?UTF-8?q?=D0=B5=D0=B5=D0=B2=D0=B8=D1=87?= <chalkerx@gmail.com>
+Date: Wed, 2 Sep 2020 08:12:17 +0300
+Subject: [PATCH 11/27] drop goog.defineClass/goog.base
+
+---
+ google-protobuf.js | 65 ----------------------------------------------
+ 1 file changed, 65 deletions(-)
+
+diff --git a/google-protobuf.js b/google-protobuf.js
+index 59200ca..fe6eaa4 100644
+--- a/google-protobuf.js
++++ b/google-protobuf.js
+@@ -274,71 +274,6 @@ goog.inherits = function (a, b) {
+     return b.prototype[c].apply(a, d);
+   };
+ };
+-goog.base = function (a, b, c) {
+-  var d = arguments.callee.caller;
+-  if (goog.STRICT_MODE_COMPATIBLE || (goog.DEBUG && !d))
+-    throw Error(
+-      'arguments.caller not defined.  goog.base() cannot be used with strict mode code. See http://www.ecma-international.org/ecma-262/5.1/#sec-C'
+-    );
+-  if ('undefined' !== typeof d.superClass_) {
+-    for (var e = Array(arguments.length - 1), f = 1; f < arguments.length; f++) e[f - 1] = arguments[f];
+-    return d.superClass_.constructor.apply(a, e);
+-  }
+-  if ('string' != typeof b && 'symbol' != typeof b)
+-    throw Error('method names provided to goog.base must be a string or a symbol');
+-  e = Array(arguments.length - 2);
+-  for (f = 2; f < arguments.length; f++) e[f - 2] = arguments[f];
+-  f = !1;
+-  for (var g = a.constructor.prototype; g; g = Object.getPrototypeOf(g))
+-    if (g[b] === d) f = !0;
+-    else if (f) return g[b].apply(a, e);
+-  if (a[b] === d) return a.constructor.prototype[b].apply(a, e);
+-  throw Error('goog.base called from a method of one name to a method of a different name');
+-};
+-goog.scope = function (a) {
+-  a.call(goog.global);
+-};
+-goog.defineClass = function (a, b) {
+-  var c = b.constructor,
+-    d = b.statics;
+-  (c && c != Object.prototype.constructor) ||
+-    (c = function () {
+-      throw Error('cannot instantiate an interface (no constructor defined).');
+-    });
+-  c = goog.defineClass.createSealingConstructor_(c, a);
+-  a && goog.inherits(c, a);
+-  delete b.constructor;
+-  delete b.statics;
+-  goog.defineClass.applyProperties_(c.prototype, b);
+-  null != d && (d instanceof Function ? d(c) : goog.defineClass.applyProperties_(c, d));
+-  return c;
+-};
+-goog.defineClass.SEAL_CLASS_INSTANCES = goog.DEBUG;
+-goog.defineClass.createSealingConstructor_ = function (a, b) {
+-  if (!goog.defineClass.SEAL_CLASS_INSTANCES) return a;
+-  var c = !goog.defineClass.isUnsealable_(b),
+-    d = function () {
+-      var b = a.apply(this, arguments) || this;
+-      b[goog.UID_PROPERTY_] = b[goog.UID_PROPERTY_];
+-      this.constructor === d && c && Object.seal instanceof Function && Object.seal(b);
+-      return b;
+-    };
+-  return d;
+-};
+-goog.defineClass.isUnsealable_ = function (a) {
+-  return a && a.prototype && a.prototype[goog.UNSEALABLE_CONSTRUCTOR_PROPERTY_];
+-};
+-goog.defineClass.OBJECT_PROTOTYPE_FIELDS_ = 'constructor hasOwnProperty isPrototypeOf propertyIsEnumerable toLocaleString toString valueOf'.split(
+-  ' '
+-);
+-goog.defineClass.applyProperties_ = function (a, b) {
+-  for (var c in b) Object.prototype.hasOwnProperty.call(b, c) && (a[c] = b[c]);
+-  for (var d = 0; d < goog.defineClass.OBJECT_PROTOTYPE_FIELDS_.length; d++)
+-    (c = goog.defineClass.OBJECT_PROTOTYPE_FIELDS_[d]), Object.prototype.hasOwnProperty.call(b, c) && (a[c] = b[c]);
+-};
+-goog.tagUnsealableClass = function (a) {
+-};
+-goog.UNSEALABLE_CONSTRUCTOR_PROPERTY_ = 'goog_defineClass_legacy_unsealable';
+ goog.TRUSTED_TYPES_POLICY_NAME = '';
+ goog.identity_ = function (a) {
+   return a;
+-- 
+2.28.0
+

@@ -1,0 +1,84 @@
+From ebc909b85b74c250a83c02d04fcfd6571db2a34a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=D0=A1=D0=BA=D0=BE=D0=B2=D0=BE=D1=80=D0=BE=D0=B4=D0=B0=20?=
+ =?UTF-8?q?=D0=9D=D0=B8=D0=BA=D0=B8=D1=82=D0=B0=20=D0=90=D0=BD=D0=B4=D1=80?=
+ =?UTF-8?q?=D0=B5=D0=B5=D0=B2=D0=B8=D1=87?= <chalkerx@gmail.com>
+Date: Wed, 2 Sep 2020 08:13:41 +0300
+Subject: [PATCH 15/27] drop goog unused helpers/workarounds (bad eval code)
+
+---
+ google-protobuf.js | 59 ----------------------------------------------
+ 1 file changed, 59 deletions(-)
+
+diff --git a/google-protobuf.js b/google-protobuf.js
+index c2d5cf2..5ee3abc 100644
+--- a/google-protobuf.js
++++ b/google-protobuf.js
+@@ -103,65 +103,6 @@ goog.ASSUME_ES_MODULES_TRANSPILED = !1;
+ goog.TRANSPILE_TO_LANGUAGE = '';
+ goog.TRANSPILER = 'transpile.js';
+ goog.hasBadLetScoping = null;
+-goog.useSafari10Workaround = function () {
+-  if (null == goog.hasBadLetScoping) {
+-    try {
+-      var a = !eval('"use strict";let x = 1; function f() { return typeof x; };f() == "number";');
+-    } catch (b) {
+-      a = !1;
+-    }
+-    goog.hasBadLetScoping = a;
+-  }
+-  return goog.hasBadLetScoping;
+-};
+-goog.workaroundSafari10EvalBug = function (a) {
+-  return '(function(){' + a + '\n;})();\n';
+-};
+-goog.normalizePath_ = function (a) {
+-  a = a.split('/');
+-  for (var b = 0; b < a.length; )
+-    '.' == a[b] ? a.splice(b, 1) : b && '..' == a[b] && a[b - 1] && '..' != a[b - 1] ? a.splice(--b, 2) : b++;
+-  return a.join('/');
+-};
+-goog.loadFileSync_ = function (a) {
+-  if (goog.global.CLOSURE_LOAD_FILE_SYNC) return goog.global.CLOSURE_LOAD_FILE_SYNC(a);
+-  try {
+-    var b = new goog.global.XMLHttpRequest();
+-    b.open('get', a, !1);
+-    b.send();
+-    return 0 == b.status || 200 == b.status ? b.responseText : null;
+-  } catch (c) {
+-    return null;
+-  }
+-};
+-goog.transpile_ = function (a, b, c) {
+-  var d = goog.global.$jscomp;
+-  d || (goog.global.$jscomp = d = {});
+-  var e = d.transpile;
+-  if (!e) {
+-    var f = goog.basePath + goog.TRANSPILER,
+-      g = goog.loadFileSync_(f);
+-    if (g) {
+-      (function () {
+-        (0, eval)(g + '\n//# sourceURL=' + f);
+-      }.call(goog.global));
+-      if (goog.global.$gwtExport && goog.global.$gwtExport.$jscomp && !goog.global.$gwtExport.$jscomp.transpile)
+-        throw Error(
+-          'The transpiler did not properly export the "transpile" method. $gwtExport: ' +
+-            JSON.stringify(goog.global.$gwtExport)
+-        );
+-      goog.global.$jscomp.transpile = goog.global.$gwtExport.$jscomp.transpile;
+-      d = goog.global.$jscomp;
+-      e = d.transpile;
+-    }
+-  }
+-  e ||
+-    (e = d.transpile = function (a, b) {
+-      goog.logToConsole_(b + ' requires transpilation but no transpiler was found.');
+-      return a;
+-    });
+-  return e(a, b, c);
+-};
+ goog.typeOf = function (a) {
+   var b = typeof a;
+   if ('object' == b)
+-- 
+2.28.0
+

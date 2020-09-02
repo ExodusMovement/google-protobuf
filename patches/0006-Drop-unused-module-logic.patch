@@ -1,0 +1,132 @@
+From 5433009e5af4331069818ca0e24be8e937d30d68 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=D0=A1=D0=BA=D0=BE=D0=B2=D0=BE=D1=80=D0=BE=D0=B4=D0=B0=20?=
+ =?UTF-8?q?=D0=9D=D0=B8=D0=BA=D0=B8=D1=82=D0=B0=20=D0=90=D0=BD=D0=B4=D1=80?=
+ =?UTF-8?q?=D0=B5=D0=B5=D0=B2=D0=B8=D1=87?= <chalkerx@gmail.com>
+Date: Wed, 2 Sep 2020 07:43:42 +0300
+Subject: [PATCH 06/27] Drop unused module logic
+
+---
+ google-protobuf.js | 88 ----------------------------------------------
+ 1 file changed, 88 deletions(-)
+
+diff --git a/google-protobuf.js b/google-protobuf.js
+index 0273913..a05bbf6 100644
+--- a/google-protobuf.js
++++ b/google-protobuf.js
+@@ -55,70 +55,11 @@ goog.STRICT_MODE_COMPATIBLE = !1;
+ goog.DISALLOW_TEST_ONLY_CODE = COMPILED && !goog.DEBUG;
+ goog.ENABLE_CHROME_APP_SAFE_SCRIPT_LOADING = !1;
+ goog.provide = function (a) {
+-  if (goog.isInModuleLoader_()) throw Error('goog.provide cannot be used within a module.');
+   goog.constructNamespace_(a);
+ };
+ goog.constructNamespace_ = function (a, b) {
+   goog.exportPath_(a, b);
+ };
+-goog.getScriptNonce = function (a) {
+-  if (a && a != goog.global) return goog.getScriptNonce_(a.document);
+-  null === goog.cspNonce_ && (goog.cspNonce_ = goog.getScriptNonce_(goog.global.document));
+-  return goog.cspNonce_;
+-};
+-goog.NONCE_PATTERN_ = /^[\w+/_-]+[=]{0,2}$/;
+-goog.cspNonce_ = null;
+-goog.getScriptNonce_ = function (a) {
+-  return (a = a.querySelector && a.querySelector('script[nonce]')) &&
+-    (a = a.nonce || a.getAttribute('nonce')) &&
+-    goog.NONCE_PATTERN_.test(a)
+-    ? a
+-    : '';
+-};
+-goog.VALID_MODULE_RE_ = /^[a-zA-Z_$][a-zA-Z0-9._$]*$/;
+-goog.module = function (a) {
+-  if (!goog.isString(a) || !a || -1 == a.search(goog.VALID_MODULE_RE_)) throw Error('Invalid module identifier');
+-  if (!goog.isInGoogModuleLoader_())
+-    throw Error(
+-      'Module ' +
+-        a +
+-        " has been loaded incorrectly. Note, modules cannot be loaded as normal scripts. They require some kind of pre-processing step. You're likely trying to load a module via a script tag or as a part of a concatenated bundle without rewriting the module. For more info see: https://github.com/google/closure-library/wiki/goog.module:-an-ES6-module-like-alternative-to-goog.provide."
+-    );
+-  if (goog.moduleLoaderState_.moduleName) throw Error('goog.module may only be called once per module.');
+-  goog.moduleLoaderState_.moduleName = a;
+-};
+-goog.module.get = function (a) {
+-  return goog.module.getInternal_(a);
+-};
+-goog.module.getInternal_ = function (a) {
+-  return null;
+-};
+-goog.ModuleType = { ES6: 'es6', GOOG: 'goog' };
+-goog.moduleLoaderState_ = null;
+-goog.isInModuleLoader_ = function () {
+-  return goog.isInGoogModuleLoader_() || goog.isInEs6ModuleLoader_();
+-};
+-goog.isInGoogModuleLoader_ = function () {
+-  return !!goog.moduleLoaderState_ && goog.moduleLoaderState_.type == goog.ModuleType.GOOG;
+-};
+-goog.isInEs6ModuleLoader_ = function () {
+-  if (goog.moduleLoaderState_ && goog.moduleLoaderState_.type == goog.ModuleType.ES6) return !0;
+-  var a = goog.global.$jscomp;
+-  return a ? ('function' != typeof a.getCurrentModulePath ? !1 : !!a.getCurrentModulePath()) : !1;
+-};
+-goog.module.declareLegacyNamespace = function () {
+-  goog.moduleLoaderState_.declareLegacyNamespace = !0;
+-};
+-goog.declareModuleId = function (a) {
+-  if (goog.moduleLoaderState_) goog.moduleLoaderState_.moduleName = a;
+-  else {
+-    var b = goog.global.$jscomp;
+-    if (!b || 'function' != typeof b.getCurrentModulePath)
+-      throw Error('Module with namespace "' + a + '" has been loaded incorrectly.');
+-    b = b.require(b.getCurrentModulePath());
+-    goog.loadedModules_[a] = { exports: b, type: goog.ModuleType.ES6, moduleId: a };
+-  }
+-};
+ goog.setTestOnly = function (a) {
+   if (goog.DISALLOW_TEST_ONLY_CODE)
+     throw ((a = a || ''), Error('Importing test-only code into non-debug environment' + (a ? ': ' + a : '.')));
+@@ -182,34 +123,6 @@ goog.useSafari10Workaround = function () {
+ goog.workaroundSafari10EvalBug = function (a) {
+   return '(function(){' + a + '\n;})();\n';
+ };
+-goog.loadModule = function (a) {
+-  var b = goog.moduleLoaderState_;
+-  try {
+-    goog.moduleLoaderState_ = { moduleName: '', declareLegacyNamespace: !1, type: goog.ModuleType.GOOG };
+-    if (goog.isFunction(a)) var c = a.call(void 0, {});
+-    else if (goog.isString(a))
+-      goog.useSafari10Workaround() && (a = goog.workaroundSafari10EvalBug(a)),
+-        (c = goog.loadModuleFromSource_.call(void 0, a));
+-    else throw Error('Invalid module definition');
+-    var d = goog.moduleLoaderState_.moduleName;
+-    if (goog.isString(d) && d)
+-      goog.moduleLoaderState_.declareLegacyNamespace
+-        ? goog.constructNamespace_(d, c)
+-        : goog.SEAL_MODULE_EXPORTS && Object.seal && 'object' == typeof c && null != c && Object.seal(c),
+-        (goog.loadedModules_[d] = {
+-          exports: c,
+-          type: goog.ModuleType.GOOG,
+-          moduleId: goog.moduleLoaderState_.moduleName,
+-        });
+-    else throw Error('Invalid module name "' + d + '"');
+-  } finally {
+-    goog.moduleLoaderState_ = b;
+-  }
+-};
+-goog.loadModuleFromSource_ = function (a) {
+-  eval(a);
+-  return {};
+-};
+ goog.normalizePath_ = function (a) {
+   a = a.split('/');
+   for (var b = 0; b < a.length; )
+@@ -416,7 +329,6 @@ goog.base = function (a, b, c) {
+   throw Error('goog.base called from a method of one name to a method of a different name');
+ };
+ goog.scope = function (a) {
+-  if (goog.isInModuleLoader_()) throw Error('goog.scope is not supported within a module.');
+   a.call(goog.global);
+ };
+ goog.defineClass = function (a, b) {
+-- 
+2.28.0
+

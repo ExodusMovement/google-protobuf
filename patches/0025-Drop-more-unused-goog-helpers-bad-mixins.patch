@@ -1,0 +1,112 @@
+From c94deede56408d9c73f2a994613c073c3db8ba5e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=D0=A1=D0=BA=D0=BE=D0=B2=D0=BE=D1=80=D0=BE=D0=B4=D0=B0=20?=
+ =?UTF-8?q?=D0=9D=D0=B8=D0=BA=D0=B8=D1=82=D0=B0=20=D0=90=D0=BD=D0=B4=D1=80?=
+ =?UTF-8?q?=D0=B5=D0=B5=D0=B2=D0=B8=D1=87?= <chalkerx@gmail.com>
+Date: Wed, 2 Sep 2020 08:58:55 +0300
+Subject: [PATCH 25/27] Drop more unused goog helpers (bad mixins)
+
+---
+ google-protobuf.js | 57 ----------------------------------------------
+ 1 file changed, 57 deletions(-)
+
+diff --git a/google-protobuf.js b/google-protobuf.js
+index 1dbfb41..c9a75d0 100644
+--- a/google-protobuf.js
++++ b/google-protobuf.js
+@@ -1,21 +1,6 @@
+ var COMPILED = !0,
+   goog = goog || {};
+ goog.global = this || self;
+-goog.isDef = function (a) {
+-  return void 0 !== a;
+-};
+-goog.isString = function (a) {
+-  return 'string' == typeof a;
+-};
+-goog.isBoolean = function (a) {
+-  return 'boolean' == typeof a;
+-};
+-goog.isNumber = function (a) {
+-  return 'number' == typeof a;
+-};
+-goog.define = function (a, b) {
+-  return b;
+-};
+ goog.FEATURESET_YEAR = 2012;
+ goog.DEBUG = !0;
+ goog.LOCALE = 'en';
+@@ -61,12 +46,6 @@ goog.typeOf = function (a) {
+   else if ('function' == b && 'undefined' == typeof a.call) return 'object';
+   return b;
+ };
+-goog.isNull = function (a) {
+-  return null === a;
+-};
+-goog.isDefAndNotNull = function (a) {
+-  return null != a;
+-};
+ goog.isArray = function (a) {
+   return 'array' == goog.typeOf(a);
+ };
+@@ -74,48 +53,15 @@ goog.isArrayLike = function (a) {
+   var b = goog.typeOf(a);
+   return 'array' == b || ('object' == b && 'number' == typeof a.length);
+ };
+-goog.isDateLike = function (a) {
+-  return goog.isObject(a) && 'function' == typeof a.getFullYear;
+-};
+-goog.isFunction = function (a) {
+-  return 'function' == goog.typeOf(a);
+-};
+ goog.isObject = function (a) {
+   var b = typeof a;
+   return ('object' == b && null != a) || 'function' == b;
+ };
+-goog.cloneObject = function (a) {
+-  var b = goog.typeOf(a);
+-  if ('object' == b || 'array' == b) {
+-    if ('function' === typeof a.clone) return a.clone();
+-    b = 'array' == b ? [] : {};
+-    for (var c in a) b[c] = goog.cloneObject(a[c]);
+-    return b;
+-  }
+-  return a;
+-};
+-goog.bind = function (a, b, c) {
+-  return a.call.apply(a.bind, arguments);
+-};
+-goog.partial = function (a, b) {
+-  var c = Array.prototype.slice.call(arguments, 1);
+-  return function () {
+-    var b = c.slice();
+-    b.push.apply(b, arguments);
+-    return a.apply(this, b);
+-  };
+-};
+-goog.mixin = function (a, b) {
+-  for (var c in b) a[c] = b[c];
+-};
+ goog.now =
+   (goog.TRUSTED_SITE && Date.now) ||
+   function () {
+     return +new Date();
+   };
+-goog.exportProperty = function (a, b, c) {
+-  a[b] = c;
+-};
+ goog.inherits = function (a, b) {
+   function c() {}
+   c.prototype = b.prototype;
+@@ -127,9 +73,6 @@ goog.inherits = function (a, b) {
+     return b.prototype[c].apply(a, d);
+   };
+ };
+-goog.identity_ = function (a) {
+-  return a;
+-};
+ var jspb = { BinaryConstants: {}, ConstBinaryMessage: function () {}, BinaryMessage: function () {} };
+ jspb.BinaryConstants.FieldType = {
+   INVALID: -1,
+-- 
+2.28.0
+

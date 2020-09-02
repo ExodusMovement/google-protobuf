@@ -1,0 +1,223 @@
+From 442aed682d507bdad88582153cc742495380785b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=D0=A1=D0=BA=D0=BE=D0=B2=D0=BE=D1=80=D0=BE=D0=B4=D0=B0=20?=
+ =?UTF-8?q?=D0=9D=D0=B8=D0=BA=D0=B8=D1=82=D0=B0=20=D0=90=D0=BD=D0=B4=D1=80?=
+ =?UTF-8?q?=D0=B5=D0=B5=D0=B2=D0=B8=D1=87?= <chalkerx@gmail.com>
+Date: Wed, 2 Sep 2020 07:41:34 +0300
+Subject: [PATCH 03/27] Drop i18n methods
+
+---
+ google-protobuf.js | 198 ---------------------------------------------
+ 1 file changed, 198 deletions(-)
+
+diff --git a/google-protobuf.js b/google-protobuf.js
+index 60bdf2e..03026dc 100644
+--- a/google-protobuf.js
++++ b/google-protobuf.js
+@@ -1450,204 +1450,6 @@ goog.string.Const.from = function (a) {
+ goog.string.Const.TYPE_MARKER_ = {};
+ goog.string.Const.GOOG_STRING_CONSTRUCTOR_TOKEN_PRIVATE_ = {};
+ goog.string.Const.EMPTY = goog.string.Const.from('');
+-goog.i18n = {};
+-goog.i18n.bidi = {};
+-goog.i18n.bidi.FORCE_RTL = !1;
+-goog.i18n.bidi.IS_RTL =
+-  goog.i18n.bidi.FORCE_RTL ||
+-  (('ar' == goog.LOCALE.substring(0, 2).toLowerCase() ||
+-    'fa' == goog.LOCALE.substring(0, 2).toLowerCase() ||
+-    'he' == goog.LOCALE.substring(0, 2).toLowerCase() ||
+-    'iw' == goog.LOCALE.substring(0, 2).toLowerCase() ||
+-    'ps' == goog.LOCALE.substring(0, 2).toLowerCase() ||
+-    'sd' == goog.LOCALE.substring(0, 2).toLowerCase() ||
+-    'ug' == goog.LOCALE.substring(0, 2).toLowerCase() ||
+-    'ur' == goog.LOCALE.substring(0, 2).toLowerCase() ||
+-    'yi' == goog.LOCALE.substring(0, 2).toLowerCase()) &&
+-    (2 == goog.LOCALE.length || '-' == goog.LOCALE.substring(2, 3) || '_' == goog.LOCALE.substring(2, 3))) ||
+-  (3 <= goog.LOCALE.length &&
+-    'ckb' == goog.LOCALE.substring(0, 3).toLowerCase() &&
+-    (3 == goog.LOCALE.length || '-' == goog.LOCALE.substring(3, 4) || '_' == goog.LOCALE.substring(3, 4))) ||
+-  (7 <= goog.LOCALE.length &&
+-    ('-' == goog.LOCALE.substring(2, 3) || '_' == goog.LOCALE.substring(2, 3)) &&
+-    ('adlm' == goog.LOCALE.substring(3, 7).toLowerCase() ||
+-      'arab' == goog.LOCALE.substring(3, 7).toLowerCase() ||
+-      'hebr' == goog.LOCALE.substring(3, 7).toLowerCase() ||
+-      'nkoo' == goog.LOCALE.substring(3, 7).toLowerCase() ||
+-      'rohg' == goog.LOCALE.substring(3, 7).toLowerCase() ||
+-      'thaa' == goog.LOCALE.substring(3, 7).toLowerCase())) ||
+-  (8 <= goog.LOCALE.length &&
+-    ('-' == goog.LOCALE.substring(3, 4) || '_' == goog.LOCALE.substring(3, 4)) &&
+-    ('adlm' == goog.LOCALE.substring(4, 8).toLowerCase() ||
+-      'arab' == goog.LOCALE.substring(4, 8).toLowerCase() ||
+-      'hebr' == goog.LOCALE.substring(4, 8).toLowerCase() ||
+-      'nkoo' == goog.LOCALE.substring(4, 8).toLowerCase() ||
+-      'rohg' == goog.LOCALE.substring(4, 8).toLowerCase() ||
+-      'thaa' == goog.LOCALE.substring(4, 8).toLowerCase()));
+-goog.i18n.bidi.Format = { LRE: '\u202a', RLE: '\u202b', PDF: '\u202c', LRM: '\u200e', RLM: '\u200f' };
+-goog.i18n.bidi.Dir = { LTR: 1, RTL: -1, NEUTRAL: 0 };
+-goog.i18n.bidi.RIGHT = 'right';
+-goog.i18n.bidi.LEFT = 'left';
+-goog.i18n.bidi.I18N_RIGHT = goog.i18n.bidi.IS_RTL ? goog.i18n.bidi.LEFT : goog.i18n.bidi.RIGHT;
+-goog.i18n.bidi.I18N_LEFT = goog.i18n.bidi.IS_RTL ? goog.i18n.bidi.RIGHT : goog.i18n.bidi.LEFT;
+-goog.i18n.bidi.toDir = function (a, b) {
+-  return 'number' == typeof a
+-    ? 0 < a
+-      ? goog.i18n.bidi.Dir.LTR
+-      : 0 > a
+-      ? goog.i18n.bidi.Dir.RTL
+-      : b
+-      ? null
+-      : goog.i18n.bidi.Dir.NEUTRAL
+-    : null == a
+-    ? null
+-    : a
+-    ? goog.i18n.bidi.Dir.RTL
+-    : goog.i18n.bidi.Dir.LTR;
+-};
+-goog.i18n.bidi.ltrChars_ =
+-  'A-Za-z\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u02b8\u0300-\u0590\u0900-\u1fff\u200e\u2c00-\ud801\ud804-\ud839\ud83c-\udbff\uf900-\ufb1c\ufe00-\ufe6f\ufefd-\uffff';
+-goog.i18n.bidi.rtlChars_ = '\u0591-\u06ef\u06fa-\u08ff\u200f\ud802-\ud803\ud83a-\ud83b\ufb1d-\ufdff\ufe70-\ufefc';
+-goog.i18n.bidi.htmlSkipReg_ = /<[^>]*>|&[^;]+;/g;
+-goog.i18n.bidi.stripHtmlIfNeeded_ = function (a, b) {
+-  return b ? a.replace(goog.i18n.bidi.htmlSkipReg_, '') : a;
+-};
+-goog.i18n.bidi.rtlCharReg_ = new RegExp('[' + goog.i18n.bidi.rtlChars_ + ']');
+-goog.i18n.bidi.ltrCharReg_ = new RegExp('[' + goog.i18n.bidi.ltrChars_ + ']');
+-goog.i18n.bidi.hasAnyRtl = function (a, b) {
+-  return goog.i18n.bidi.rtlCharReg_.test(goog.i18n.bidi.stripHtmlIfNeeded_(a, b));
+-};
+-goog.i18n.bidi.hasRtlChar = goog.i18n.bidi.hasAnyRtl;
+-goog.i18n.bidi.hasAnyLtr = function (a, b) {
+-  return goog.i18n.bidi.ltrCharReg_.test(goog.i18n.bidi.stripHtmlIfNeeded_(a, b));
+-};
+-goog.i18n.bidi.ltrRe_ = new RegExp('^[' + goog.i18n.bidi.ltrChars_ + ']');
+-goog.i18n.bidi.rtlRe_ = new RegExp('^[' + goog.i18n.bidi.rtlChars_ + ']');
+-goog.i18n.bidi.isRtlChar = function (a) {
+-  return goog.i18n.bidi.rtlRe_.test(a);
+-};
+-goog.i18n.bidi.isLtrChar = function (a) {
+-  return goog.i18n.bidi.ltrRe_.test(a);
+-};
+-goog.i18n.bidi.isNeutralChar = function (a) {
+-  return !goog.i18n.bidi.isLtrChar(a) && !goog.i18n.bidi.isRtlChar(a);
+-};
+-goog.i18n.bidi.ltrDirCheckRe_ = new RegExp('^[^' + goog.i18n.bidi.rtlChars_ + ']*[' + goog.i18n.bidi.ltrChars_ + ']');
+-goog.i18n.bidi.rtlDirCheckRe_ = new RegExp('^[^' + goog.i18n.bidi.ltrChars_ + ']*[' + goog.i18n.bidi.rtlChars_ + ']');
+-goog.i18n.bidi.startsWithRtl = function (a, b) {
+-  return goog.i18n.bidi.rtlDirCheckRe_.test(goog.i18n.bidi.stripHtmlIfNeeded_(a, b));
+-};
+-goog.i18n.bidi.isRtlText = goog.i18n.bidi.startsWithRtl;
+-goog.i18n.bidi.startsWithLtr = function (a, b) {
+-  return goog.i18n.bidi.ltrDirCheckRe_.test(goog.i18n.bidi.stripHtmlIfNeeded_(a, b));
+-};
+-goog.i18n.bidi.isLtrText = goog.i18n.bidi.startsWithLtr;
+-goog.i18n.bidi.isRequiredLtrRe_ = /^http:\/\/.*/;
+-goog.i18n.bidi.isNeutralText = function (a, b) {
+-  a = goog.i18n.bidi.stripHtmlIfNeeded_(a, b);
+-  return goog.i18n.bidi.isRequiredLtrRe_.test(a) || (!goog.i18n.bidi.hasAnyLtr(a) && !goog.i18n.bidi.hasAnyRtl(a));
+-};
+-goog.i18n.bidi.ltrExitDirCheckRe_ = new RegExp(
+-  '[' + goog.i18n.bidi.ltrChars_ + '][^' + goog.i18n.bidi.rtlChars_ + ']*$'
+-);
+-goog.i18n.bidi.rtlExitDirCheckRe_ = new RegExp(
+-  '[' + goog.i18n.bidi.rtlChars_ + '][^' + goog.i18n.bidi.ltrChars_ + ']*$'
+-);
+-goog.i18n.bidi.endsWithLtr = function (a, b) {
+-  return goog.i18n.bidi.ltrExitDirCheckRe_.test(goog.i18n.bidi.stripHtmlIfNeeded_(a, b));
+-};
+-goog.i18n.bidi.isLtrExitText = goog.i18n.bidi.endsWithLtr;
+-goog.i18n.bidi.endsWithRtl = function (a, b) {
+-  return goog.i18n.bidi.rtlExitDirCheckRe_.test(goog.i18n.bidi.stripHtmlIfNeeded_(a, b));
+-};
+-goog.i18n.bidi.isRtlExitText = goog.i18n.bidi.endsWithRtl;
+-goog.i18n.bidi.rtlLocalesRe_ = /^(ar|ckb|dv|he|iw|fa|nqo|ps|sd|ug|ur|yi|.*[-_](Adlm|Arab|Hebr|Nkoo|Rohg|Thaa))(?!.*[-_](Latn|Cyrl)($|-|_))($|-|_)/i;
+-goog.i18n.bidi.isRtlLanguage = function (a) {
+-  return goog.i18n.bidi.rtlLocalesRe_.test(a);
+-};
+-goog.i18n.bidi.bracketGuardTextRe_ = /(\(.*?\)+)|(\[.*?\]+)|(\{.*?\}+)|(<.*?>+)/g;
+-goog.i18n.bidi.guardBracketInText = function (a, b) {
+-  b = (void 0 === b ? goog.i18n.bidi.hasAnyRtl(a) : b) ? goog.i18n.bidi.Format.RLM : goog.i18n.bidi.Format.LRM;
+-  return a.replace(goog.i18n.bidi.bracketGuardTextRe_, b + '$&' + b);
+-};
+-goog.i18n.bidi.enforceRtlInHtml = function (a) {
+-  return '<' == a.charAt(0) ? a.replace(/<\w+/, '$& dir=rtl') : '\n<span dir=rtl>' + a + '</span>';
+-};
+-goog.i18n.bidi.enforceRtlInText = function (a) {
+-  return goog.i18n.bidi.Format.RLE + a + goog.i18n.bidi.Format.PDF;
+-};
+-goog.i18n.bidi.enforceLtrInHtml = function (a) {
+-  return '<' == a.charAt(0) ? a.replace(/<\w+/, '$& dir=ltr') : '\n<span dir=ltr>' + a + '</span>';
+-};
+-goog.i18n.bidi.enforceLtrInText = function (a) {
+-  return goog.i18n.bidi.Format.LRE + a + goog.i18n.bidi.Format.PDF;
+-};
+-goog.i18n.bidi.dimensionsRe_ = /:\s*([.\d][.\w]*)\s+([.\d][.\w]*)\s+([.\d][.\w]*)\s+([.\d][.\w]*)/g;
+-goog.i18n.bidi.leftRe_ = /left/gi;
+-goog.i18n.bidi.rightRe_ = /right/gi;
+-goog.i18n.bidi.tempRe_ = /%%%%/g;
+-goog.i18n.bidi.mirrorCSS = function (a) {
+-  return a
+-    .replace(goog.i18n.bidi.dimensionsRe_, ':$1 $4 $3 $2')
+-    .replace(goog.i18n.bidi.leftRe_, '%%%%')
+-    .replace(goog.i18n.bidi.rightRe_, goog.i18n.bidi.LEFT)
+-    .replace(goog.i18n.bidi.tempRe_, goog.i18n.bidi.RIGHT);
+-};
+-goog.i18n.bidi.doubleQuoteSubstituteRe_ = /([\u0591-\u05f2])"/g;
+-goog.i18n.bidi.singleQuoteSubstituteRe_ = /([\u0591-\u05f2])'/g;
+-goog.i18n.bidi.normalizeHebrewQuote = function (a) {
+-  return a
+-    .replace(goog.i18n.bidi.doubleQuoteSubstituteRe_, '$1\u05f4')
+-    .replace(goog.i18n.bidi.singleQuoteSubstituteRe_, '$1\u05f3');
+-};
+-goog.i18n.bidi.wordSeparatorRe_ = /\s+/;
+-goog.i18n.bidi.hasNumeralsRe_ = /[\d\u06f0-\u06f9]/;
+-goog.i18n.bidi.rtlDetectionThreshold_ = 0.4;
+-goog.i18n.bidi.estimateDirection = function (a, b) {
+-  var c = 0,
+-    d = 0,
+-    e = !1;
+-  a = goog.i18n.bidi.stripHtmlIfNeeded_(a, b).split(goog.i18n.bidi.wordSeparatorRe_);
+-  for (b = 0; b < a.length; b++) {
+-    var f = a[b];
+-    goog.i18n.bidi.startsWithRtl(f)
+-      ? (c++, d++)
+-      : goog.i18n.bidi.isRequiredLtrRe_.test(f)
+-      ? (e = !0)
+-      : goog.i18n.bidi.hasAnyLtr(f)
+-      ? d++
+-      : goog.i18n.bidi.hasNumeralsRe_.test(f) && (e = !0);
+-  }
+-  return 0 == d
+-    ? e
+-      ? goog.i18n.bidi.Dir.LTR
+-      : goog.i18n.bidi.Dir.NEUTRAL
+-    : c / d > goog.i18n.bidi.rtlDetectionThreshold_
+-    ? goog.i18n.bidi.Dir.RTL
+-    : goog.i18n.bidi.Dir.LTR;
+-};
+-goog.i18n.bidi.detectRtlDirectionality = function (a, b) {
+-  return goog.i18n.bidi.estimateDirection(a, b) == goog.i18n.bidi.Dir.RTL;
+-};
+-goog.i18n.bidi.setElementDirAndAlign = function (a, b) {
+-  a &&
+-    (b = goog.i18n.bidi.toDir(b)) &&
+-    ((a.style.textAlign = b == goog.i18n.bidi.Dir.RTL ? goog.i18n.bidi.RIGHT : goog.i18n.bidi.LEFT),
+-    (a.dir = b == goog.i18n.bidi.Dir.RTL ? 'rtl' : 'ltr'));
+-};
+-goog.i18n.bidi.setElementDirByTextDirectionality = function (a, b) {
+-  switch (goog.i18n.bidi.estimateDirection(b)) {
+-    case goog.i18n.bidi.Dir.LTR:
+-      a.dir = 'ltr';
+-      break;
+-    case goog.i18n.bidi.Dir.RTL:
+-      a.dir = 'rtl';
+-      break;
+-    default:
+-      a.removeAttribute('dir');
+-  }
+-};
+-goog.i18n.bidi.DirectionalString = function () {};
+ goog.object = {};
+ goog.object.is = function (a, b) {
+   return a === b ? 0 !== a || 1 / a === 1 / b : a !== a && b !== b;
+-- 
+2.28.0
+

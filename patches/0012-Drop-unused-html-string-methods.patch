@@ -1,0 +1,268 @@
+From 6501bcefacc92fcb06ed4f78e95e46eb6311ab52 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=D0=A1=D0=BA=D0=BE=D0=B2=D0=BE=D1=80=D0=BE=D0=B4=D0=B0=20?=
+ =?UTF-8?q?=D0=9D=D0=B8=D0=BA=D0=B8=D1=82=D0=B0=20=D0=90=D0=BD=D0=B4=D1=80?=
+ =?UTF-8?q?=D0=B5=D0=B5=D0=B2=D0=B8=D1=87?= <chalkerx@gmail.com>
+Date: Wed, 2 Sep 2020 07:59:55 +0300
+Subject: [PATCH 12/27] Drop unused/html string methods
+
+---
+ google-protobuf.js | 201 ---------------------------------------------
+ 1 file changed, 201 deletions(-)
+
+diff --git a/google-protobuf.js b/google-protobuf.js
+index fe6eaa4..840e5ab 100644
+--- a/google-protobuf.js
++++ b/google-protobuf.js
+@@ -1054,68 +1054,12 @@ goog.string.internal.caseInsensitiveCompare = function (a, b) {
+   b = String(b).toLowerCase();
+   return a < b ? -1 : a == b ? 0 : 1;
+ };
+-goog.string.internal.newLineToBr = function (a, b) {
+-  return a.replace(/(\r\n|\r|\n)/g, b ? '<br />' : '<br>');
+-};
+-goog.string.internal.htmlEscape = function (a, b) {
+-  if (b)
+-    a = a
+-      .replace(goog.string.internal.AMP_RE_, '&amp;')
+-      .replace(goog.string.internal.LT_RE_, '&lt;')
+-      .replace(goog.string.internal.GT_RE_, '&gt;')
+-      .replace(goog.string.internal.QUOT_RE_, '&quot;')
+-      .replace(goog.string.internal.SINGLE_QUOTE_RE_, '&#39;')
+-      .replace(goog.string.internal.NULL_RE_, '&#0;');
+-  else {
+-    if (!goog.string.internal.ALL_RE_.test(a)) return a;
+-    -1 != a.indexOf('&') && (a = a.replace(goog.string.internal.AMP_RE_, '&amp;'));
+-    -1 != a.indexOf('<') && (a = a.replace(goog.string.internal.LT_RE_, '&lt;'));
+-    -1 != a.indexOf('>') && (a = a.replace(goog.string.internal.GT_RE_, '&gt;'));
+-    -1 != a.indexOf('"') && (a = a.replace(goog.string.internal.QUOT_RE_, '&quot;'));
+-    -1 != a.indexOf("'") && (a = a.replace(goog.string.internal.SINGLE_QUOTE_RE_, '&#39;'));
+-    -1 != a.indexOf('\x00') && (a = a.replace(goog.string.internal.NULL_RE_, '&#0;'));
+-  }
+-  return a;
+-};
+-goog.string.internal.AMP_RE_ = /&/g;
+-goog.string.internal.LT_RE_ = /</g;
+-goog.string.internal.GT_RE_ = />/g;
+-goog.string.internal.QUOT_RE_ = /"/g;
+-goog.string.internal.SINGLE_QUOTE_RE_ = /'/g;
+-goog.string.internal.NULL_RE_ = /\x00/g;
+-goog.string.internal.ALL_RE_ = /[\x00&<>"']/;
+-goog.string.internal.whitespaceEscape = function (a, b) {
+-  return goog.string.internal.newLineToBr(a.replace(/  /g, ' &#160;'), b);
+-};
+ goog.string.internal.contains = function (a, b) {
+   return -1 != a.indexOf(b);
+ };
+ goog.string.internal.caseInsensitiveContains = function (a, b) {
+   return goog.string.internal.contains(a.toLowerCase(), b.toLowerCase());
+ };
+-goog.string.internal.compareVersions = function (a, b) {
+-  var c = 0;
+-  a = goog.string.internal.trim(String(a)).split('.');
+-  b = goog.string.internal.trim(String(b)).split('.');
+-  for (var d = Math.max(a.length, b.length), e = 0; 0 == c && e < d; e++) {
+-    var f = a[e] || '',
+-      g = b[e] || '';
+-    do {
+-      f = /(\d*)(\D*)(.*)/.exec(f) || ['', '', '', ''];
+-      g = /(\d*)(\D*)(.*)/.exec(g) || ['', '', '', ''];
+-      if (0 == f[0].length && 0 == g[0].length) break;
+-      c = 0 == f[1].length ? 0 : parseInt(f[1], 10);
+-      var h = 0 == g[1].length ? 0 : parseInt(g[1], 10);
+-      c =
+-        goog.string.internal.compareElements_(c, h) ||
+-        goog.string.internal.compareElements_(0 == f[2].length, 0 == g[2].length) ||
+-        goog.string.internal.compareElements_(f[2], g[2]);
+-      f = f[3];
+-      g = g[3];
+-    } while (0 == c);
+-  }
+-  return c;
+-};
+ goog.string.internal.compareElements_ = function (a, b) {
+   return a < b ? -1 : a > b ? 1 : 0;
+ };
+@@ -1579,66 +1523,6 @@ goog.string.urlEncode = function (a) {
+ goog.string.urlDecode = function (a) {
+   return decodeURIComponent(a.replace(/\+/g, ' '));
+ };
+-goog.string.newLineToBr = goog.string.internal.newLineToBr;
+-goog.string.htmlEscape = function (a, b) {
+-  a = goog.string.internal.htmlEscape(a, b);
+-  goog.string.DETECT_DOUBLE_ESCAPING && (a = a.replace(goog.string.E_RE_, '&#101;'));
+-  return a;
+-};
+-goog.string.E_RE_ = /e/g;
+-goog.string.whitespaceEscape = function (a, b) {
+-  return goog.string.newLineToBr(a.replace(/  /g, ' &#160;'), b);
+-};
+-goog.string.preserveSpaces = function (a) {
+-  return a.replace(/(^|[\n ]) /g, '$1' + goog.string.Unicode.NBSP);
+-};
+-goog.string.stripQuotes = function (a, b) {
+-  for (var c = b.length, d = 0; d < c; d++) {
+-    var e = 1 == c ? b : b.charAt(d);
+-    if (a.charAt(0) == e && a.charAt(a.length - 1) == e) return a.substring(1, a.length - 1);
+-  }
+-  return a;
+-};
+-goog.string.specialEscapeChars_ = {
+-  '\x00': '\\0',
+-  '\b': '\\b',
+-  '\f': '\\f',
+-  '\n': '\\n',
+-  '\r': '\\r',
+-  '\t': '\\t',
+-  '\x0B': '\\x0B',
+-  '"': '\\"',
+-  '\\': '\\\\',
+-  '<': '\\u003C',
+-};
+-goog.string.jsEscapeCache_ = { "'": "\\'" };
+-goog.string.quote = function (a) {
+-  a = String(a);
+-  for (var b = ['"'], c = 0; c < a.length; c++) {
+-    var d = a.charAt(c),
+-      e = d.charCodeAt(0);
+-    b[c + 1] = goog.string.specialEscapeChars_[d] || (31 < e && 127 > e ? d : goog.string.escapeChar(d));
+-  }
+-  b.push('"');
+-  return b.join('');
+-};
+-goog.string.escapeString = function (a) {
+-  for (var b = [], c = 0; c < a.length; c++) b[c] = goog.string.escapeChar(a.charAt(c));
+-  return b.join('');
+-};
+-goog.string.escapeChar = function (a) {
+-  if (a in goog.string.jsEscapeCache_) return goog.string.jsEscapeCache_[a];
+-  if (a in goog.string.specialEscapeChars_) return (goog.string.jsEscapeCache_[a] = goog.string.specialEscapeChars_[a]);
+-  var b = a.charCodeAt(0);
+-  if (31 < b && 127 > b) var c = a;
+-  else {
+-    if (256 > b) {
+-      if (((c = '\\x'), 16 > b || 256 < b)) c += '0';
+-    } else (c = '\\u'), 4096 > b && (c += '0');
+-    c += b.toString(16).toUpperCase();
+-  }
+-  return (goog.string.jsEscapeCache_[a] = c);
+-};
+ goog.string.contains = goog.string.internal.contains;
+ goog.string.caseInsensitiveContains = goog.string.internal.caseInsensitiveContains;
+ goog.string.countOf = function (a, b) {
+@@ -1652,19 +1536,6 @@ goog.string.removeAt = function (a, b, c) {
+ goog.string.remove = function (a, b) {
+   return a.replace(b, '');
+ };
+-goog.string.removeAll = function (a, b) {
+-  b = new RegExp(goog.string.regExpEscape(b), 'g');
+-  return a.replace(b, '');
+-};
+-goog.string.replaceAll = function (a, b, c) {
+-  b = new RegExp(goog.string.regExpEscape(b), 'g');
+-  return a.replace(b, c.replace(/\$/g, '$$$$'));
+-};
+-goog.string.regExpEscape = function (a) {
+-  return String(a)
+-    .replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, '\\$1')
+-    .replace(/\x08/g, '\\x08');
+-};
+ goog.string.repeat = String.prototype.repeat
+   ? function (a, b) {
+       return a.repeat(b);
+@@ -1684,83 +1555,14 @@ goog.string.makeSafe = function (a) {
+ goog.string.buildString = function (a) {
+   return Array.prototype.join.call(arguments, '');
+ };
+-goog.string.getRandomString = function () {
+-  return (
+-    Math.floor(2147483648 * Math.random()).toString(36) +
+-    Math.abs(Math.floor(2147483648 * Math.random()) ^ goog.now()).toString(36)
+-  );
+-};
+-goog.string.compareVersions = goog.string.internal.compareVersions;
+-goog.string.hashCode = function (a) {
+-  for (var b = 0, c = 0; c < a.length; ++c) b = (31 * b + a.charCodeAt(c)) >>> 0;
+-  return b;
+-};
+-goog.string.uniqueStringCounter_ = (2147483648 * Math.random()) | 0;
+-goog.string.createUniqueString = function () {
+-  return 'goog_' + goog.string.uniqueStringCounter_++;
+-};
+ goog.string.toNumber = function (a) {
+   var b = Number(a);
+   return 0 == b && goog.string.isEmptyOrWhitespace(a) ? NaN : b;
+ };
+-goog.string.isLowerCamelCase = function (a) {
+-  return /^[a-z]+([A-Z][a-z]*)*$/.test(a);
+-};
+-goog.string.isUpperCamelCase = function (a) {
+-  return /^([A-Z][a-z]*)+$/.test(a);
+-};
+-goog.string.toCamelCase = function (a) {
+-  return String(a).replace(/\-([a-z])/g, function (a, c) {
+-    return c.toUpperCase();
+-  });
+-};
+-goog.string.toSelectorCase = function (a) {
+-  return String(a)
+-    .replace(/([A-Z])/g, '-$1')
+-    .toLowerCase();
+-};
+-goog.string.toTitleCase = function (a, b) {
+-  b = goog.isString(b) ? goog.string.regExpEscape(b) : '\\s';
+-  return a.replace(new RegExp('(^' + (b ? '|[' + b + ']+' : '') + ')([a-z])', 'g'), function (a, b, e) {
+-    return b + e.toUpperCase();
+-  });
+-};
+-goog.string.capitalize = function (a) {
+-  return String(a.charAt(0)).toUpperCase() + String(a.substr(1)).toLowerCase();
+-};
+ goog.string.parseInt = function (a) {
+   isFinite(a) && (a = String(a));
+   return goog.isString(a) ? (/^\s*-?0x/i.test(a) ? parseInt(a, 16) : parseInt(a, 10)) : NaN;
+ };
+-goog.string.splitLimit = function (a, b, c) {
+-  a = a.split(b);
+-  for (var d = []; 0 < c && a.length; ) d.push(a.shift()), c--;
+-  a.length && d.push(a.join(b));
+-  return d;
+-};
+-goog.string.lastComponent = function (a, b) {
+-  if (b) 'string' == typeof b && (b = [b]);
+-  else return a;
+-  for (var c = -1, d = 0; d < b.length; d++)
+-    if ('' != b[d]) {
+-      var e = a.lastIndexOf(b[d]);
+-      e > c && (c = e);
+-    }
+-  return -1 == c ? a : a.slice(c + 1);
+-};
+-goog.string.editDistance = function (a, b) {
+-  var c = [],
+-    d = [];
+-  if (a == b) return 0;
+-  if (!a.length || !b.length) return Math.max(a.length, b.length);
+-  for (var e = 0; e < b.length + 1; e++) c[e] = e;
+-  for (e = 0; e < a.length; e++) {
+-    d[0] = e + 1;
+-    for (var f = 0; f < b.length; f++) d[f + 1] = Math.min(d[f] + 1, c[f + 1] + 1, c[f] + Number(a[e] != b[f]));
+-    for (f = 0; f < c.length; f++) c[f] = d[f];
+-  }
+-  return d[b.length];
+-};
+ goog.crypt.base64 = {};
+ goog.crypt.base64.DEFAULT_ALPHABET_COMMON_ = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+ goog.crypt.base64.ENCODED_VALS = goog.crypt.base64.DEFAULT_ALPHABET_COMMON_ + '+/=';
+@@ -2167,9 +1969,6 @@ jspb.utils.debugBytesToTextFormat = function (a) {
+   }
+   return b + '"';
+ };
+-jspb.utils.debugScalarToTextFormat = function (a) {
+-  return 'string' === typeof a ? goog.string.quote(a) : a.toString();
+-};
+ jspb.utils.stringToByteArray = function (a) {
+   for (var b = new Uint8Array(a.length), c = 0; c < a.length; c++) {
+     var d = a.charCodeAt(c);
+-- 
+2.28.0
+
