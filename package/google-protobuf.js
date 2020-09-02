@@ -3062,7 +3062,7 @@ exports.typeOf = goog.typeOf;
 exports.exportSymbol = (path, value, { proto }) => {
   const parts = path.split('.')
   for (const part of parts) {
-    if (!/^[a-z][a-z0-9_]*$/.test(part) || part === 'constructor') {
+    if (!/^[a-z][a-z0-9_]*$/i.test(part) || part === 'constructor') {
       throw new Error('exportSymbol: Unexpected path')
     }
   }
