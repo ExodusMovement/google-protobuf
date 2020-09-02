@@ -7,6 +7,8 @@ and puts it into `./package`.
 
 ## Warning
 
-This package is incompatible with original google-protobuf, and generated _pb.js files need patching.
+This package is incompatible with original google-protobuf, and generated `_pb.js` files need patching.
 
-See [build.sh](./build.sh) file for replacements in `*_pb.js` files.
+See [fix_pb.sh](./fix_pb.sh) file for replacements in `*_pb.js` files.
+
+Usage: `./fix_pb.sh path-to-pbs/*_pb.js`.

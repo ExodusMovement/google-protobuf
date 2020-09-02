@@ -16,28 +16,18 @@ cp package.patched.json package/package.json
 
 # *_pb.js replacements start below this line
 
-replace \
-  "var global = Function('return this')();" \
-  "const localProtoScope = {}; const { proto } = localProtoScope;" \
-  -- package/google/protobuf/*_pb.js > /dev/null
-if grep -qrE "[^a-zA-Z]Function\(" package; then
-  echo "Error: Function( still present"
-  exit -1
-fi
+./fix_pb.sh package/google/protobuf/*_pb.js
 
 replace \
   ", global)" \
   ", localProtoScope)" \
   -- package/google/protobuf/*_pb.js > /dev/null
-if grep -qrE '(^|[^a-zA-Z."])global([^a-zA-Z]|$)' package/google; then
-  echo "Error: global still present"
+
+if grep -qrE "[^a-zA-Z]Function\(" package; then
+  echo "Error: Function( still present"
   exit -1
 fi
 
-replace \
-  "goog.exportSymbol" \
-  "// symbol export removed: (" \
-  -- package/google/protobuf/*_pb.js > /dev/null
 if grep -qrE "exportSymbol" package; then
   echo "Error: exportSymbol( still present"
   exit -1
