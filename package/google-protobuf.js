@@ -3057,4 +3057,32 @@ exports.ExtensionFieldBinaryInfo = jspb.ExtensionFieldBinaryInfo;
 exports.inherits = goog.inherits;
 exports.object = { extend: goog.object.extend };
 exports.typeOf = goog.typeOf;
-exports.exportSymbol = () => {} // noop
+
+// Reimplemented
+exports.exportSymbol = (path, value, { proto }) => {
+  const parts = path.split('.')
+  for (const part of parts) {
+    if (!/^[a-z][a-z0-9_]*$/.test(part) || part === 'constructor') {
+      throw new Error('exportSymbol: Unexpected path')
+    }
+  }
+
+  const final = parts.pop()
+  if (value !== null || parts[0] !== 'proto' || !proto || !final) {
+    throw new Error('exportSymbol: Unexpected scope')
+  }
+
+  let curr = proto
+  for (const part of parts.slice(1)) {
+    if (curr[part] && Object.getPrototypeOf(curr[part]) !== Object.prototype) {
+      throw new Error('exportSymbol: Unexpected non-plain-object')
+    }
+    if (!curr[part]) curr[part] = {}
+    curr = curr[part]
+  }
+
+  if (final in curr) {
+    throw new Error('exportSymbol: already defined!')
+  }
+  curr[final] = value
+}
