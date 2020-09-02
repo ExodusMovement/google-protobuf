@@ -9,11 +9,10 @@ if grep -qrE "[^a-zA-Z]Function\(" "$@"; then
   exit -1
 fi
 
-sed -i -E "/^goog.exportSymbol\([^)]+\);$/d" -- "$@"
-if grep -qrE "exportSymbol" "$@"; then
-  echo "Error: exportSymbol( still present"
-  exit -1
-fi
+replace \
+  ", global);" \
+  ', { proto });' \
+  --  "$@" > /dev/null
 if grep -qrE '(^|[^a-zA-Z."])global([^a-zA-Z]|$)' "$@"; then
   echo "Error: global still present"
   exit -1
