@@ -8,13 +8,13 @@
  */
 // GENERATED CODE -- DO NOT EDIT!
 
-var jspb = require('google-protobuf');
+var jspb = require('@exodus/google-protobuf');
 var goog = jspb;
 const proto = {};
 
-var google_protobuf_any_pb = require('google-protobuf/google/protobuf/any_pb.js');
+var google_protobuf_any_pb = require('@exodus/google-protobuf/google/protobuf/any_pb.js');
 goog.object.extend(proto, google_protobuf_any_pb);
-var google_protobuf_source_context_pb = require('google-protobuf/google/protobuf/source_context_pb.js');
+var google_protobuf_source_context_pb = require('@exodus/google-protobuf/google/protobuf/source_context_pb.js');
 goog.object.extend(proto, google_protobuf_source_context_pb);
 goog.exportSymbol('proto.google.protobuf.Enum', null, { proto });
 goog.exportSymbol('proto.google.protobuf.EnumValue', null, { proto });

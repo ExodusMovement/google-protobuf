@@ -18,6 +18,19 @@ if grep -qrE '(^|[^a-zA-Z."])global([^a-zA-Z]|$)' "$@"; then
   exit -1
 fi
 
+replace \
+  "require('google-protobuf'" \
+  "require('@exodus/google-protobuf'" \
+  --  "$@" > /dev/null
+replace \
+  "require('google-protobuf/" \
+  "require('@exodus/google-protobuf/" \
+  --  "$@" > /dev/null
+if grep -qrE '\(.google-protobuf' "$@"; then
+  echo "Error: google-protobuf still present"
+  exit -1
+fi
+
 # Extra checks
 
 if grep -qrE "[^a-zA-Z]eval\(" "$@"; then
