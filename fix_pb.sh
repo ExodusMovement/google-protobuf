@@ -2,28 +2,20 @@
 
 replace \
   "var global = Function('return this')();" \
-  "const localProtoScope = {}; const { proto } = localProtoScope;" \
+  "const proto = {};" \
   -- "$@" > /dev/null
 if grep -qrE "[^a-zA-Z]Function\(" "$@"; then
   echo "Error: Function( still present"
   exit -1
 fi
 
-replace \
-  ", global)" \
-  ", localProtoScope)" \
-  -- "$@" > /dev/null
-if grep -qrE '(^|[^a-zA-Z."])global([^a-zA-Z]|$)' "$@"; then
-  echo "Error: global still present"
-  exit -1
-fi
-
-replace \
-  "goog.exportSymbol" \
-  "// symbol export removed: (" \
-  -- "$@" > /dev/null
+sed -i -E "/^goog.exportSymbol\([^)]+\);$/d" -- "$@"
 if grep -qrE "exportSymbol" "$@"; then
   echo "Error: exportSymbol( still present"
+  exit -1
+fi
+if grep -qrE '(^|[^a-zA-Z."])global([^a-zA-Z]|$)' "$@"; then
+  echo "Error: global still present"
   exit -1
 fi
 
