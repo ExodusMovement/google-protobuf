@@ -7,7 +7,7 @@ and puts it into `./package`.
 
 ## Warning
 
-This package is incompatible with original google-protobuf, and generated `_pb.js` files need patching.
+Generated `_pb.js` files need patching!
 
 See [fix_pb.sh](./fix_pb.sh) file for replacements in `*_pb.js` files.
 

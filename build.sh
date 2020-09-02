@@ -28,11 +28,6 @@ if grep -qrE "[^a-zA-Z]Function\(" package; then
   exit -1
 fi
 
-if grep -qrE "exportSymbol" package; then
-  echo "Error: exportSymbol( still present"
-  exit -1
-fi
-
 if grep -qrE "[^a-zA-Z]eval\(" package; then
   echo "Error: eval( still present"
   exit -1

@@ -3057,3 +3057,4 @@ exports.ExtensionFieldBinaryInfo = jspb.ExtensionFieldBinaryInfo;
 exports.inherits = goog.inherits;
 exports.object = { extend: goog.object.extend };
 exports.typeOf = goog.typeOf;
+exports.exportSymbol = () => {} // noop
